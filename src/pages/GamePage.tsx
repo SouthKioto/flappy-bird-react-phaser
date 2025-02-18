@@ -47,11 +47,13 @@ class FlappyBird extends Phaser.Scene {
 
     this.anims.create({
       key: 'up',
-      frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 1 }),
+      frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 3 }),
       frameRate: 10,
       repeat: -1
     });
 
+
+    //chyba nie potrzebne wiecej 
     this.anims.create({
       key: 'down',
       frames: this.anims.generateFrameNumbers('bird', { start: 2, end: 3 }),
@@ -89,7 +91,7 @@ class FlappyBird extends Phaser.Scene {
 
     } else if (cursor?.space.isUp) {
 
-      FlappyBird.player.anims.play('down', true)
+      FlappyBird.player.anims.play('up', false)
     }
     if (FlappyBird.player.body.touching.down) {
       console.log("He's touching grass")
