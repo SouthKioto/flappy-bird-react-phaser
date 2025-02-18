@@ -8,7 +8,7 @@ class FlappyBird extends Phaser.Scene {
   static player;
 
   preload() {
-    //this.load.image('red', 'assets/particles/red.png');
+
     this.load.image('background', `../../assets/Background/Background${DefaultSettings.background_colour}.png`);
     this.load.spritesheet('pipe', `../../assets/Tiles/Style ${DefaultSettings.pipe_style}/PipeStyle${DefaultSettings.pipe_style}.png`, {
       frameHeight: 48,
@@ -23,8 +23,7 @@ class FlappyBird extends Phaser.Scene {
 
   create() {
 
-    const containerWitch = this.scale.width;
-
+    //skalowanie obrazu i dodawanie go jako sklejany background do canvy
     const tileSize = DefaultSettings.bgImg_Width; // zakładamy, że szerokość = wysokość = 256
     const numTiles = Math.ceil(DefaultSettings.width / tileSize);
 
@@ -33,10 +32,8 @@ class FlappyBird extends Phaser.Scene {
       this.add.image(i * tileSize, 0, 'background').setOrigin(0, 0).setScale(3);
     }
 
-
     //this.add.image(DefaultSettings.width / 2, DefaultSettings.heigh / 2, 'background')
     //.setScale(2);
-
 
     const pipe = this.physics.add.sprite(400, 300, 'pipe', 1).setScale(4)
     pipe.setCollideWorldBounds(true)
@@ -62,24 +59,14 @@ class FlappyBird extends Phaser.Scene {
     });
 
 
+    this.tweens.add({
+      targets: 'pipe',
+      x: 600,
+      ease: 'Power1',
+      duration: 2000
+    });
 
-    //const background = this.add.image(DefaultSettings.width / 2, DefaultSettings.heigh / 2, 'background');
 
-    //background.setSize(DefaultSettings.width, DefaultSettings.heigh)
-
-    //const scaleX = (window.innerWidth / background.width);
-    //const scaleY = (window.innerHeight / background.height);
-
-    //const scale = Math.max(scaleX, scaleY);
-
-    //console.log(scale)
-
-    //background.setScale(scale)
-    //const imagesCount = DefaultSettings.width % background.width;
-    //console.log(`Count: ${imagesCount}`)
-
-    //const cols = DefaultSettings.width / background.width;
-    //console.log(`Cols ${cols}`)
   }
 
   update() {
@@ -97,6 +84,11 @@ class FlappyBird extends Phaser.Scene {
       console.log("He's touching grass")
     }
   }
+
+
+  //const GenereatePipe = () => {
+
+  //}
 }
 
 export const GamePage = () => {
