@@ -6,6 +6,7 @@ import { DefaultSettings } from "../classes/DefaultSettings";
 class FlappyBird extends Phaser.Scene {
 
   static player;
+  static pipe;
 
   preload() {
 
@@ -35,12 +36,17 @@ class FlappyBird extends Phaser.Scene {
     //this.add.image(DefaultSettings.width / 2, DefaultSettings.heigh / 2, 'background')
     //.setScale(2);
 
-    const pipe = this.physics.add.sprite(400, 300, 'pipe', 1).setScale(4)
-    pipe.setCollideWorldBounds(true)
+    FlappyBird.pipe = this.physics.add.sprite(window.innerWidth - 100, window.innerHeight, 'pipe', 1).setScale(4)
+    FlappyBird.pipe.setCollideWorldBounds(true)
+
+    //FlappyBird.pipe.setVelocityX(-160);
 
     FlappyBird.player = this.physics.add.sprite(100, 500, 'bird').setScale(3);
     FlappyBird.player.setBounce(0.2)
     FlappyBird.player.setCollideWorldBounds(true)
+
+
+    this.physics.add.collider(FlappyBird.player, FlappyBird.pipe)
 
     this.anims.create({
       key: 'up',
@@ -50,23 +56,14 @@ class FlappyBird extends Phaser.Scene {
     });
 
 
+
     //chyba nie potrzebne wiecej 
-    this.anims.create({
+    /*this.anims.create({
       key: 'down',
       frames: this.anims.generateFrameNumbers('bird', { start: 2, end: 3 }),
       frameRate: 10,
       repeat: -1
-    });
-
-
-    this.tweens.add({
-      targets: 'pipe',
-      x: 600,
-      ease: 'Power1',
-      duration: 2000
-    });
-
-
+    });*/
   }
 
   update() {
@@ -81,14 +78,32 @@ class FlappyBird extends Phaser.Scene {
       FlappyBird.player.anims.play('up', false)
     }
     if (FlappyBird.player.body.touching.down) {
-      console.log("He's touching grass")
+      //console.log("He's touching grass")
     }
+
+    this.PipeMove();
   }
 
 
-  //const GenereatePipe = () => {
+  PipeMove = () => {
+    console.log(FlappyBird.pipe.x)
 
-  //}
+    if (FlappyBird.pipe.body.touching.left) {
+      FlappyBird.pipe.destroy();
+    } else {
+      FlappyBird.pipe.x -= 2;
+    }
+
+    if (FlappyBird.pipe.x === 60) {
+      console.log(`${FlappyBird.pipe.x}`)
+
+      FlappyBird.pipe.destroy();
+    }
+  }
+
+  GeneratePipe = () => {
+    console.log();
+  }
 }
 
 export const GamePage = () => {
