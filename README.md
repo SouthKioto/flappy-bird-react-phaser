@@ -3,9 +3,12 @@
 
 ## Solution used:
 - # Liblary: React + TypeScript
-    - [React](https://react.dev/)
-    - [TypeScript](https://www.typescriptlang.org/)
+    - [React Docs](https://react.dev/)
+    - [TypeScript Docs](https://www.typescriptlang.org/)
 
-    - Local server: Vite
-    - Game Engine: Phaserjs
-    -
+
+- # Local server: Vite
+    - [Vite (Installation ect.)](https://vite.dev/guide/)
+
+- # Game Engine: Phaserjs
+    - [Phaserjs Docs](https://docs.phaser.io/phaser/getting-started/what-is-phaser)
