@@ -1,5 +1,15 @@
 # Example Flappy Bird Game
-## <b>Vite + React + TypeScript</b>
+### A simple Flappy bird game made in the Phaserjs engine. To run locally you need to have Node.js downloaded and run the following commands
+
+`Bash
+    npm install 
+`
+
+and next
+
+`Bash
+    yarn run dev
+`
 
 ### Solution used:
 - <b>Liblary: React + TypeScript</b>
@@ -7,8 +17,8 @@
     - [TypeScript Docs](https://www.typescriptlang.org/)
 
 
-- # Local server: Vite
+- <b>Local server: Vite</b>
     - [Vite (Installation ect.)](https://vite.dev/guide/)
 
-- # Game Engine: Phaserjs
+- <b>Game Engine: Phaserjs</b>
     - [Phaserjs Docs](https://docs.phaser.io/phaser/getting-started/what-is-phaser)
