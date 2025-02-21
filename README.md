@@ -3,8 +3,8 @@
 
 ## Solution used:
 - # Liblary: React + TypeScript
-    [React](https://react.dev/)
-    [TypeScript](https://www.typescriptlang.org/)
+    - [React](https://react.dev/)
+    - [TypeScript](https://www.typescriptlang.org/)
 
     - Local server: Vite
     - Game Engine: Phaserjs
