@@ -11,7 +11,7 @@ and next
     yarn run dev
 ```
 
-### Solution used:
+## Solution used:
 - <b>Liblary: React + TypeScript</b>
     - [React Docs](https://react.dev/)
     - [TypeScript Docs](https://www.typescriptlang.org/)

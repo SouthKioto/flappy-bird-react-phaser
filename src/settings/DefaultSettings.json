@@ -1,0 +1,14 @@
+{
+  "user_name": "Player",
+  "user_score": 2137,
+  
+  "user_cock": { 
+    "cock_colour": 1, 
+    "cock_style": 1
+  },
+
+  "user_pipe": {
+    "pipe_colour": 1,
+    "pipe_style": 1
+  } 
+}

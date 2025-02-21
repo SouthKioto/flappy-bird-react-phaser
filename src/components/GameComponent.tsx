@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import Phaser from "phaser";
-import { DefaultSettings } from "../classes/DefaultSettings";
+import { DefaultSettings } from "../settings/DefaultSettings";
 
 export const GameComponent = ({ config }) => {
 

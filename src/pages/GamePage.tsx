@@ -1,14 +1,33 @@
-import Phaser, { Scale } from "phaser";
+import Phaser from "phaser";
 import { GameComponent } from "../components/GameComponent";
-import { DefaultSettings } from "../classes/DefaultSettings";
+import { DefaultSettings } from "../settings/DefaultSettings";
 import FormCheckLabel from "react-bootstrap/esm/FormCheckLabel";
-import { lazy } from "react";
 
+import Settings from "../settings/defaultSettings.json"
+import { useState } from "react";
+
+interface UserCock {
+  cock_colour: number,
+  cock_style: number,
+}
+
+interface UserPipe {
+  pipe_colour: number,
+  pipe_style: number,
+}
+
+interface UserSettingsJson {
+  user_name: string,
+  user_score: number,
+
+  user_cock: UserCock
+  user_pipe: UserPipe,
+}
 
 class FlappyBird extends Phaser.Scene {
 
   static player;
-  static pipe;
+  static pipes: Phaser.GameObjects.Sprite[] = [];
 
   preload() {
 
@@ -66,7 +85,7 @@ class FlappyBird extends Phaser.Scene {
       //console.log("He's touching grass")
     }
 
-    if (!FlappyBird.pipe) {
+    if (FlappyBird.pipes.length === 0) {
       this.GeneratePipes();
     }
 
@@ -75,53 +94,58 @@ class FlappyBird extends Phaser.Scene {
 
 
   PipeMove = () => {
-    //console.log(FlappyBird.pipe.x)
-    if (!FlappyBird.pipe) return;
+    for (let i = FlappyBird.pipes.length - 1; i >= 0; i--) {
+      const pipe = FlappyBird.pipes[i];
 
-    //sprawdzenie czy rura zetknęła 
-    //sie z lewą krawedzia kanwy 
-    if (FlappyBird.pipe.x < 0) {
-      FlappyBird.pipe.destroy();
-      FlappyBird.pipe = null;
-
-      //wywołanie funkcji generacji kolejnej rury
-      //this.GeneratePipe();
-
-      return;
-    } else {
-      FlappyBird.pipe.x -= 1.5;
+      if (pipe.x < -pipe.width) {
+        pipe.destroy();
+        FlappyBird.pipes.splice(i, 1);
+      } else {
+        pipe.x -= 1.5;
+      }
     }
 
-    //console.log(`${FlappyBird.pipe.x} + ${FlappyBird.pipe.width} = ${FlappyBird.pipe.x + FlappyBird.pipe.width}`)
-
-    //console.log(`${FlappyBird.pipe.displayOriginX}`)
   }
 
   GeneratePipes = () => {
-    for (let i = 0; i <= 1; i++) {
-      if (i % 2 == 0) {
-        FlappyBird.pipe = this.physics.add.sprite(
-          window.innerWidth,
-          0,
-          'pipe',
-        ).setScale(4).setOrigin(0, 0).setRotation(3.14)
-      } else {
-        FlappyBird.pipe = this.physics.add.sprite(
-          window.innerWidth,
-          window.innerHeight,
-          'pipe',
-        ).setScale(4).setOrigin(0, 0);
-      }
+    const pipeSpacing = 200;
+    const pipeX = window.innerWidth;
 
-      FlappyBird.pipe.setCollideWorldBounds(true)
+    const minX = window.innerWidth;
+    const maxY = window.innerHeight - 100 - pipeSpacing;
 
-      this.physics.add.collider(FlappyBird.player, FlappyBird.pipe)
-    }
+    const holeY = Phaser.Math.Between(minX, maxY);
+
+    console.log(`Dziura: ${holeY}
+    MinX: ${minX}
+    MaxY: ${maxY}`)
+
+    const topPipe = this.physics.add.sprite(pipeX, holeY - pipeSpacing, 'pipe')
+      .setScale(4)
+      .setOrigin(0.5, 1)
+      .setRotation(Math.PI)
+      .setImmovable(true);
+
+    const bottomPipe = this.physics.add.sprite(pipeX, holeY + pipeSpacing, 'pipe')
+      .setScale(4)
+      .setOrigin(0.5, 0)
+      .setImmovable(true);
+
+    topPipe.body.allowGravity = false;
+    bottomPipe.body.allowGravity = false;
+
+    FlappyBird.pipes.push(topPipe, bottomPipe);
+
+    this.physics.add.collider(FlappyBird.player, topPipe);
+    this.physics.add.collider(FlappyBird.player, bottomPipe);
   }
 
 }
 
 export const GamePage = () => {
+  const [userSettings, setUserSettings] = useState<UserSettingsJson>(Settings)
+
+
   const config = {
     type: Phaser.AUTO,
     parent: 'phaser-container',
