@@ -22,3 +22,8 @@ and next
 
 - <b>Game Engine: Phaserjs</b>
     - [Phaserjs Docs](https://docs.phaser.io/phaser/getting-started/what-is-phaser)
+
+- <b>Packet Manager: Yarn</b>
+    - [Yarn Docs](https://yarnpkg.com/getting-started)
+
+## Gallery
