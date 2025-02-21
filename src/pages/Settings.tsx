@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import _defaultSettings_ from "../settings/DefaultSettings.json"
+import _defaultSettings_ from "../settings/DefaultUserSettings.json"
 
 interface UserCock {
   cock_colour: number,

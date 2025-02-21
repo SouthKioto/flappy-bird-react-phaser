@@ -1,6 +1,6 @@
 
 export class DefaultSettings {
-  static heigh = 768; //wysokosc phaser-container
+  static heigh = window.innerHeight; //wysokosc phaser-container
   static width = window.innerWidth; //szerokosc phaser-container
 
   static background_colour = 6;

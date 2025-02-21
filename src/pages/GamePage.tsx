@@ -3,8 +3,11 @@ import { GameComponent } from "../components/GameComponent";
 import { DefaultSettings } from "../settings/DefaultSettings";
 import FormCheckLabel from "react-bootstrap/esm/FormCheckLabel";
 
-import Settings from "../settings/defaultSettings.json"
+import Settings from "../settings/DefaultUserSettings.json";
 import { useState } from "react";
+
+//na razie interface nie potrzebne 
+//ale moga sie przydac pozniej podczas
 
 interface UserCock {
   cock_colour: number,
@@ -62,6 +65,10 @@ class FlappyBird extends Phaser.Scene {
     FlappyBird.player.setBounce(0.2)
     FlappyBird.player.setCollideWorldBounds(true)
 
+    this.add.text(1024, 550, "Góra", { color: '#FF0000' });
+
+    this.add.text(1024, 950, "Gół", { color: '#FF0000' })
+
     this.anims.create({
       key: 'up',
       frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 3 }),
@@ -112,10 +119,9 @@ class FlappyBird extends Phaser.Scene {
     const pipeX = window.innerWidth;
 
     const minX = window.innerWidth;
-    const maxY = window.innerHeight - 100 - pipeSpacing;
+    const maxY = 0;
 
     const holeY = Phaser.Math.Between(minX, maxY);
-
     console.log(`Dziura: ${holeY}
     MinX: ${minX}
     MaxY: ${maxY}`)
@@ -143,7 +149,7 @@ class FlappyBird extends Phaser.Scene {
 }
 
 export const GamePage = () => {
-  const [userSettings, setUserSettings] = useState<UserSettingsJson>(Settings)
+  const [userScore, setScoreSettings] = useState<number>()
 
 
   const config = {
