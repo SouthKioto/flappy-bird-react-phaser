@@ -1,5 +1,5 @@
 # Example Flappy Bird Game
-<b>Vite + React + TypeScript</b>
+## <b>Vite + React + TypeScript</b>
 
 ## Solution used:
 - # Liblary: React + TypeScript
