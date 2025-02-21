@@ -1,15 +1,15 @@
 # Example Flappy Bird Game
 ### A simple Flappy bird game made in the Phaserjs engine. To run locally you need to have Node.js downloaded and run the following commands
 
-`Bash
+```Bash
     npm install 
-`
+```
 
 and next
 
-`Bash
+```Bash
     yarn run dev
-`
+```
 
 ### Solution used:
 - <b>Liblary: React + TypeScript</b>
