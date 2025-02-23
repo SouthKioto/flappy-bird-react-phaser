@@ -30,14 +30,27 @@ interface UserSettingsJson {
 class FlappyBird extends Phaser.Scene {
 
   static player;
+
   static pipes: Phaser.GameObjects.Sprite[] = [];
+  static pipe;
+
+  static velocityX = 0.2; //poruszanie się rur
+  static pipeSpacing = 200; //odstęp między rurami
+  static pipeX = 0;
+  static pipeY = 0;
+
 
   preload() {
     this.load.image('background', `../../assets/Background/Background${DefaultSettings.background_colour}.png`);
-    this.load.spritesheet('pipe', `../../assets/Tiles/Style ${DefaultSettings.pipe_style}/PipeStyle${DefaultSettings.pipe_style}.png`, {
+
+    /*this.load.spritesheet('pipe', `../../assets/Tiles/Style ${DefaultSettings.pipe_style}/PipeStyle${DefaultSettings.pipe_style}.png`, {
       frameHeight: 48,
       frameWidth: 32,
-    })
+    })*/
+
+    this.load.image('pipeTop', '../../assets/Tiles/pipe-green-top.png');
+    this.load.image('pipeBot', '../../assets/Tiles/pipe-green-bot.png');
+
 
     this.load.spritesheet('bird', `../../assets/Player/StyleBird${DefaultSettings.bird_style}/Bird${DefaultSettings.bird_style}-${DefaultSettings.bird_colour}.png`, {
       frameHeight: 16,
@@ -46,27 +59,12 @@ class FlappyBird extends Phaser.Scene {
   }
 
   create() {
-
-    //skalowanie obrazu i dodawanie go jako sklejany background do canvy
-    const tileSize = DefaultSettings.bgImg_Width; // zakładamy, że szerokość = wysokość = 256
-    const numTiles = Math.ceil(DefaultSettings.width / tileSize);
-
-    for (let i = 0; i < numTiles; i++) {
-      // Ustawiamy origin na (0, 0), aby lewy górny róg obrazka odpowiadał pozycji (x, y)
-      this.add.image(i * tileSize, 0, 'background').setOrigin(0, 0).setScale(3);
-    }
-
-    //this.add.image(DefaultSettings.width / 2, DefaultSettings.heigh / 2, 'background')
-    //.setScale(2);
-    //FlappyBird.pipe.setVelocityX(-160);
-
     FlappyBird.player = this.physics.add.sprite(100, 500, 'bird').setScale(3);
     FlappyBird.player.setBounce(0.2)
     FlappyBird.player.setCollideWorldBounds(true)
 
-    this.add.text(1024, 550, "Góra", { color: '#FF0000' });
-
-    this.add.text(1024, 950, "Dół", { color: '#FF0000' })
+    //this.add.text(1024, 550, "Góra", { color: '#FF0000' });
+    //this.add.text(1024, 950, "Dół", { color: '#FF0000' })
 
     this.anims.create({
       key: 'up',
@@ -74,6 +72,9 @@ class FlappyBird extends Phaser.Scene {
       frameRate: 50,
       repeat: -1
     });
+
+
+    setInterval(this.GeneratePipes, 1000);
   }
 
   update() {
@@ -91,9 +92,6 @@ class FlappyBird extends Phaser.Scene {
       //console.log("He's touching grass")
     }
 
-    if (FlappyBird.pipes.length === 0) {
-      this.GeneratePipes();
-    }
 
     this.PipeMove();
   }
@@ -103,6 +101,7 @@ class FlappyBird extends Phaser.Scene {
     for (let i = FlappyBird.pipes.length - 1; i >= 0; i--) {
       const pipe = FlappyBird.pipes[i];
 
+
       if (pipe.x < -pipe.width) {
         pipe.destroy();
         FlappyBird.pipes.splice(i, 1);
@@ -110,39 +109,20 @@ class FlappyBird extends Phaser.Scene {
         pipe.x -= 1.5;
       }
     }
-
   }
 
   GeneratePipes = () => {
-    const pipeSpacing = 200;
-    const pipeX = window.innerWidth;
+    FlappyBird.pipe = this.physics.add.staticGroup();
 
-    const minX = window.innerWidth;
-    const maxY = 0;
+    let randomY =
 
-    const holeY = Phaser.Math.Between(minX, maxY);
-    console.log(`Dziura: ${holeY}
-    MinX: ${minX}
-    MaxY: ${maxY}`)
+      let pipeBot = FlappyBird.pipe.create(360, 640, 'pipeBot').setScale(1);
+    FlappyBird.pipes.push(pipeBot);
 
-    const topPipe = this.physics.add.sprite(pipeX, holeY - pipeSpacing, 'pipe')
-      .setScale(4)
-      .setOrigin(0.5, 1)
-      .setRotation(Math.PI)
-      .setImmovable(true);
+    let pipeTop = FlappyBird.pipe.create(360, 0, 'pipeTop').setScale(1);
+    FlappyBird.pipes.push(pipeTop);
+    //console.log(FlappyBird.pipes.length)
 
-    const bottomPipe = this.physics.add.sprite(pipeX, holeY + pipeSpacing, 'pipe')
-      .setScale(4)
-      .setOrigin(0.5, 0)
-      .setImmovable(true);
-
-    topPipe.body.allowGravity = false;
-    bottomPipe.body.allowGravity = false;
-
-    FlappyBird.pipes.push(topPipe, bottomPipe);
-
-    this.physics.add.collider(FlappyBird.player, topPipe);
-    this.physics.add.collider(FlappyBird.player, bottomPipe);
   }
 
 }
@@ -155,7 +135,7 @@ export const GamePage = () => {
     type: Phaser.AUTO,
     parent: 'phaser-container',
     width: DefaultSettings.width,
-    height: DefaultSettings.heigh,
+    height: DefaultSettings.height,
     scale: {
       mode: Phaser.Scale.FIT,
       //autoCenter: Phaser.Scale.CENTER_BOTH

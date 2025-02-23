@@ -13,9 +13,6 @@ export const GameComponent = ({ config }) => {
   })
 
   return (
-    <div id="phaser-container"
-      style={{ width: DefaultSettings.width, height: DefaultSettings.heigh }}>
-
-    </div>
+    <div id="phaser-container"></div>
   )
 }
