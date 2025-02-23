@@ -33,7 +33,6 @@ class FlappyBird extends Phaser.Scene {
   static pipes: Phaser.GameObjects.Sprite[] = [];
 
   preload() {
-
     this.load.image('background', `../../assets/Background/Background${DefaultSettings.background_colour}.png`);
     this.load.spritesheet('pipe', `../../assets/Tiles/Style ${DefaultSettings.pipe_style}/PipeStyle${DefaultSettings.pipe_style}.png`, {
       frameHeight: 48,
@@ -67,7 +66,7 @@ class FlappyBird extends Phaser.Scene {
 
     this.add.text(1024, 550, "Góra", { color: '#FF0000' });
 
-    this.add.text(1024, 950, "Gół", { color: '#FF0000' })
+    this.add.text(1024, 950, "Dół", { color: '#FF0000' })
 
     this.anims.create({
       key: 'up',
