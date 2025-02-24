@@ -41,6 +41,9 @@ class FlappyBird extends Phaser.Scene {
 
   private pipeInterval: NodeJS.Timer;
   private gameStarted: boolean = false;
+  private gameOver: boolean = false;
+  private score: number = 0;
+  private scoreText: Phaser.GameObjects.Text;
 
   preload() {
     this.load.image('background', `../../assets/Background/Background${DefaultSettings.background_colour}.png`);
@@ -61,8 +64,11 @@ class FlappyBird extends Phaser.Scene {
   }
 
   create() {
-    // Inicjalizacja elementów gry...
-    FlappyBird.pipe = this.physics.add.staticGroup();
+    FlappyBird.pipe = this.physics.add.group({
+      allowGravity: false,
+      immovable: true,
+    });
+
     FlappyBird.player = this.physics.add.sprite(200, DefaultSettings.height / 2, 'bird').setScale(3);
     FlappyBird.player.setBounce(0.2);
     FlappyBird.player.setCollideWorldBounds(true);
@@ -70,18 +76,27 @@ class FlappyBird extends Phaser.Scene {
     FlappyBird.player.body.allowGravity = false;
 
     const startText = this.add.text(DefaultSettings.width / 2, DefaultSettings.height / 2, 'Naciśnij spację aby rozpocząć', { fontSize: '32px', color: '#fff' });
-    startText.setOrigin(0.5)
+    startText.setOrigin(0.5);
+
+    this.scoreText = this.add.text(10, 10, `Score ${this.score}`, { fontSize: '32px', color: '#fff' });
 
     this.input.keyboard?.on('keydown-SPACE', () => {
       if (!this.gameStarted) {
         this.gameStarted = true;
+        this.gameOver = false;
+        this.score = 0; // Zresetuj wynik
+        this.scoreText.setText(`Score: ${this.score}`);
+
         FlappyBird.player.body.allowGravity = true;
 
         startText.destroy();
         this.pipeInterval = setInterval(this.GeneratePipes, 1000);
+      } else if (this.gameOver) {
+        // Zresetuj grę po zakończeniu
+        this.cleanup();
+        this.scene.restart();
       }
-    })
-
+    });
 
     this.physics.world.on('worldbounds', (body) => {
       if (body.gameObject === FlappyBird.player) {
@@ -90,41 +105,66 @@ class FlappyBird extends Phaser.Scene {
       }
     }, this);
 
+
     this.anims.create({
       key: 'up',
       frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 3 }),
       frameRate: 50,
-      repeat: -1
+      repeat: -1,
     });
 
+
     this.physics.add.collider(FlappyBird.player, FlappyBird.pipe, () => {
-      this.cleanup();
-      this.scene.restart();
+      if (!this.gameOver) {
+        this.gameStarted = false;
+        this.gameOver = true;
+        this.cleanup();
+
+        localStorage.setItem('Wynik', this.score);
+
+        this.tweens.add({
+          targets: FlappyBird.player,
+          alpha: 0,
+          duration: 0,
+          yoyo: true,
+          repeat: 5,
+          onComplete: () => {
+            this.scene.restart();
+          },
+        });
+      }
     });
   }
 
   cleanup() {
     clearInterval(this.pipeInterval)
+
+    console.log(`GameStart: ${this.gameStarted} GameOver: ${this.gameOver}`)
   }
 
+
   update() {
-    if (!this.gameStarted) {
+    if (!this.gameStarted || this.gameOver) { // Zatrzymaj akcje, gdy gra się nie zaczęła lub skończyła
       return;
     }
 
+    FlappyBird.pipes.forEach((pipe) => {
+      if (pipe.texture.key == 'pipeTop' && !pipe.getData('scored')) {
+        if (pipe.x + pipe.width < FlappyBird.player.x) {
+          this.score += 1;
+          pipe.setData('scored', true);
+          this.scoreText.setText(`Score: ${this.score}`);
+        }
+      }
+    });
+
     const cursor = this.input.keyboard?.createCursorKeys();
     if (cursor?.space.isDown) {
-      FlappyBird.player.setVelocityY(-200);
-      FlappyBird.player.anims.play('up', true)
-
+      FlappyBird.player.setVelocityY(-300);
+      FlappyBird.player.anims.play('up', true);
     } else if (cursor?.space.isUp) {
-
-      FlappyBird.player.anims.play('up', false)
+      FlappyBird.player.anims.play('up', false);
     }
-    if (FlappyBird.player.body.touching.down) {
-      console.log("He's touching grass")
-    }
-
 
     this.PipeMove();
   }
@@ -146,28 +186,23 @@ class FlappyBird extends Phaser.Scene {
   }
 
   GeneratePipes = () => {
+    if (this.gameOver) return; // Zatrzymaj generowanie rur po zakończeniu gry
+
     const pipeBotTexture = this.textures.get('pipeBot');
     const pipeTopTexture = this.textures.get('pipeTop');
 
     const pipeBotHeight = pipeBotTexture.getSourceImage().height;
 
-    const marginTop = 50;
-
-    //console.log(`Wysokość: ${pipeBotHeight.getSourceImage().height}`)
-
     let randomY = FlappyBird.pipeY - (pipeBotHeight / 4) - Math.random() * (pipeBotHeight / 2);
     let emptySpace = DefaultSettings.height / 2;
 
-    let pipeTop = FlappyBird.pipe.create(FlappyBird.pipeX, randomY, 'pipeTop');
-    let pipeBot = FlappyBird.pipe.create(FlappyBird.pipeX, randomY + emptySpace + pipeBotHeight, 'pipeBot');
+    let pipeTop = FlappyBird.pipe.create(FlappyBird.pipeX, randomY, 'pipeTop') as Phaser.Physics.Arcade.Sprite;
+    let pipeBot = FlappyBird.pipe.create(FlappyBird.pipeX, randomY + emptySpace + pipeBotHeight, 'pipeBot') as Phaser.Physics.Arcade.Sprite;
 
-    //pipeTop.y -= 50;
-    //pipeBot.y += 50;
+    pipeTop.setData('scored', false);
 
     FlappyBird.pipes.push(pipeTop);
     FlappyBird.pipes.push(pipeBot);
-
-    //console.log(FlappyBird.pipes.length)
   }
 
 }
@@ -189,7 +224,7 @@ export const GamePage = () => {
     physics: {
       default: "arcade",
       arcade: {
-        gravity: { y: 500 },
+        gravity: { y: 600 },
         debug: false,
       },
     },
