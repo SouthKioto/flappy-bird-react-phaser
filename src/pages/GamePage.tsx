@@ -120,7 +120,11 @@ class FlappyBird extends Phaser.Scene {
         this.gameOver = true;
         this.cleanup();
 
-        localStorage.setItem('Wynik', this.score);
+        const player_data = {
+
+        }
+
+        //localStorage.setItem('Wynik');
 
         this.tweens.add({
           targets: FlappyBird.player,
@@ -209,7 +213,6 @@ class FlappyBird extends Phaser.Scene {
 
 export const GamePage = () => {
   const [userScore, setScoreSettings] = useState<number>()
-
 
   const config = {
     type: Phaser.AUTO,
