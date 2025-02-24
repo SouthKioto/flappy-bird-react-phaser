@@ -1,0 +1,5 @@
+1. Zmiana ptaka w grze (phaser)
+2. GameOver (przycisk powrotu) (phaser)
+3. Dodawanie do leaderborda
+
+(wyciągnięcie score z klasy)
