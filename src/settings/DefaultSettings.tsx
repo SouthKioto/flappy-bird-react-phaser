@@ -1,7 +1,7 @@
 
 export class DefaultSettings {
   static height = 640; //wysokosc phaser-container
-  static width = 360; //szerokosc phaser-container
+  static width = window.innerWidth; //szerokosc phaser-container
 
   static background_colour = 6;
 
