@@ -1,0 +1,83 @@
+body {
+    padding: 20px;
+    min-height: 100vh;
+    background-image: linear-gradient(to bottom right, rgb(27, 27, 143), rgb(78, 170, 201)) !important;
+    background-repeat: no-repeat !important;
+    background-color: steelblue;
+    font-family: "Lucida Console" !important;
+}
+h1.logo {  
+    user-select: none;
+    font-weight: bolder !important;
+}
+@media screen and (min-width: 601px) {
+    h1.logo {
+        font-size: 5vw !important;
+        line-height: 10vh !important;
+    }
+}
+@media screen and (max-width: 600px) {
+    h1.logo {
+        font-size: 25vw !important;
+        line-height: 15vh !important;  
+    }
+}
+
+button {
+    font-weight: bold !important;
+}
+button.play {
+    font-size: xx-large;
+    height: 100px;
+    width: 100px;
+    border-radius: 90px !important;  
+}
+button.leaderboard h5 {
+    margin: 5px;
+}
+
+a:has(button.play) {
+    width: 120px;
+}
+a:has(button.leaderboard) {
+    width: 19%;
+}
+a:has(button.settings) {
+    width: 14%;
+}
+a:has(button.back) {
+    width: 12%;
+}
+
+img.bird {
+    min-width: 50px;
+    min-height: 50px;
+}
+
+table.leaderboard {
+    background-color: white;
+}
+table.leaderboard tr {
+    text-align: center;
+}
+table.leaderboard tr th{
+    font-size: larger;
+}
+table.leaderboard tr:first-of-type + tr {
+    color: gold;
+    font-weight: bolder;
+    font-size: 2em;
+}
+table.leaderboard tr:first-of-type + tr + tr {
+    color: silver;
+    font-weight: bolder;
+    font-size: 1.7em;
+}
+table.leaderboard tr:first-of-type + tr + tr + tr {
+    color: rgb(184, 106, 42);
+    font-weight: bolder;
+    font-size: 1.4em;
+}
+table.leaderboard tr:nth-child(even) {
+    background-color: #d2fdbf  !important;
+}
