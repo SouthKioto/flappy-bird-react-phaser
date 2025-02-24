@@ -1,5 +1,5 @@
-1. Zmiana ptaka w grze (phaser)
-2. GameOver (przycisk powrotu) (phaser)
+1. Zmiana ptaka w grze (phaser GamePage.tsx)
+2. GameOver (przycisk powrotu) (phaser GamePage.tsx)
 3. Dodawanie do leaderborda
 
 (wyciągnięcie score z klasy)

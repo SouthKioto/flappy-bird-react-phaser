@@ -16,7 +16,6 @@ and next
     - [React Docs](https://react.dev/)
     - [TypeScript Docs](https://www.typescriptlang.org/)
 
-
 - <b>Local server: Vite</b>
     - [Vite (Installation ect.)](https://vite.dev/guide/)
 
@@ -25,6 +24,12 @@ and next
 
 - <b>Packet Manager: Yarn</b>
     - [Yarn Docs](https://yarnpkg.com/getting-started)
+
+- <b>React-bootstrap / Bootstrap</b>
+    - [React-bootstrap Docs](https://react-bootstrap.netlify.app/docs/getting-started/introduction)
+
+- <b>Bootstrap-icons</b>
+    - [Bootstrap-icons](https://icons.getbootstrap.com/)
 
 ## Gallery
 
