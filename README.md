@@ -25,6 +25,7 @@ and next
 - <b>Packet Manager: Yarn</b>
     - [Yarn Docs](https://yarnpkg.com/getting-started)
 
+# Css icons liblaries
 - <b>React-bootstrap / Bootstrap</b>
     - [React-bootstrap Docs](https://react-bootstrap.netlify.app/docs/getting-started/introduction)
 
