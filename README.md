@@ -44,4 +44,4 @@ and next
 ![settings](https://github.com/SouthKioto/flappy-bird-react-phaser/blob/master/src/gallery/settings.png)
 
 - Game
-- ![game](https://github.com/SouthKioto/flappy-bird-react-phaser/blob/master/src/gallery/game.png)
+ ![game](https://github.com/SouthKioto/flappy-bird-react-phaser/blob/master/src/gallery/game.png)
