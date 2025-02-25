@@ -4,7 +4,7 @@ import { DefaultSettings } from "../settings/DefaultSettings";
 import FormCheckLabel from "react-bootstrap/esm/FormCheckLabel";
 
 import Settings from "../settings/DefaultUserSettings.json";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Placeholder } from "react-bootstrap";
 
 //na razie interface nie potrzebne 
@@ -29,6 +29,19 @@ interface UserSettingsJson {
 }
 
 class FlappyBird extends Phaser.Scene {
+  private static FlappyBird_: FlappyBird  //instancja
+
+  private constructor() {
+    super()
+  }  
+
+  public static Instance = () : FlappyBird => {
+    if(this.FlappyBird_ ===  null || this.FlappyBird_ === undefined){
+      this.FlappyBird_ = new FlappyBird();
+    }
+    return this.FlappyBird_;
+  }
+
   static player;
 
   static pipes: Phaser.GameObjects.Sprite[] = [];
@@ -42,7 +55,7 @@ class FlappyBird extends Phaser.Scene {
   private pipeInterval: NodeJS.Timer;
   private gameStarted: boolean = false;
   private gameOver: boolean = false;
-  private score: number = 0;
+  public score: number = 0;
   private scoreText: Phaser.GameObjects.Text;
 
   preload() {
@@ -90,7 +103,7 @@ class FlappyBird extends Phaser.Scene {
         FlappyBird.player.body.allowGravity = true;
 
         startText.destroy();
-        this.pipeInterval = setInterval(this.GeneratePipes, 1000);
+        this.pipeInterval = setInterval(this.GeneratePipes, 2500);
       } else if (this.gameOver) {
         // Zresetuj grę po zakończeniu
         this.cleanup();
@@ -120,11 +133,35 @@ class FlappyBird extends Phaser.Scene {
         this.gameOver = true;
         this.cleanup();
 
-        const player_data = {
+        const settings : UserSettingsJson = JSON.parse(localStorage.getItem("settings") || '');
 
+        //console.log(settings.user_name)
+
+        console.log(`Score: ${this.score}`)
+
+        const user_cock = {
+          user_name: settings.user_name,
+          user_score: this.score
         }
 
-        //localStorage.setItem('Wynik');
+        let leaderboard = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+        if(leaderboard === null)
+        {
+          localStorage.handleClick("leaderboard", JSON.stringify([user_cock]));
+        }
+
+        if(leaderboard.find((entry) => (entry.user_name === user_cock.user_name)))
+        {
+          if(leaderboard.find((entry) => (entry.user_name === user_cock.user_name && entry.user_score < user_cock.user_score)))
+            leaderboard.find((entry) => (entry.user_name === user_cock.user_name)).user_score = user_cock.user_score;
+        }
+        else
+        {
+          leaderboard.push(user_cock);
+        }
+      
+        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+        alert("Added");
 
         this.tweens.add({
           targets: FlappyBird.player,
@@ -184,7 +221,7 @@ class FlappyBird extends Phaser.Scene {
         FlappyBird.pipes.splice(i, 1);
 
       } else {
-        pipe.x -= 1.5;
+        pipe.x -= 2;
       }
     }
   }
@@ -212,7 +249,12 @@ class FlappyBird extends Phaser.Scene {
 }
 
 export const GamePage = () => {
-  const [userScore, setScoreSettings] = useState<number>()
+  const flappy_score = FlappyBird.Instance();
+  console.log(flappy_score.score);
+
+  useEffect(() => {
+    console.log(flappy_score.score);
+  }, [flappy_score])
 
   const config = {
     type: Phaser.AUTO,
