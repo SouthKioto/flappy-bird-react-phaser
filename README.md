@@ -34,7 +34,5 @@ and next
 
 ## Gallery
 
-```Js
-//Coming soon
-``` 
-
+- Main
+![mainpage]()

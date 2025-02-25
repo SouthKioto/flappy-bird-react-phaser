@@ -119,15 +119,17 @@ export const SettingsPage = () => {
               <hr className='m-4' />
               <h5 className='mt-3'>Pipe style:</h5>
               <img src={"assets/settings/pipe/PipeStyle" + pipeStyle + ".png"} alt={"pipeStyle" + pipeStyle} className='m-1' />
-              <FormSelect onChange={(e) => setPipeStyle(Number(e.target.value))}>
+              <FormSelect onChange={(e) => setPipeStyle(Number(e.target.value))} disabled >
                 <option id="PipeStyleOption1" value="1">Classic</option>
                 <option id="PipeStyleOption2" value="2">Granite</option>
                 <option id="PipeStyleOption3" value="3">Cartoon</option>
                 <option id="PipeStyleOption4" value="4">Simple</option>
                 <option id="PipeStyleOption5" value="5">Castle</option>
               </FormSelect>
+              <p style={{ fontSize: '10px' }}>in development</p>
+
               <h5 className='mt-3'>Pipe color:</h5>
-              <FormSelect onChange={(e) => setPipeColor(Number(e.target.value))}>
+              <FormSelect onChange={(e) => setPipeColor(Number(e.target.value))} disabled>
                 <option id="PipeColorOption1" value="1">Green</option>
                 <option id="PipeColorOption2" value="2">Yellow</option>
                 <option id="PipeColorOption3" value="3">Red</option>
@@ -137,6 +139,7 @@ export const SettingsPage = () => {
                 <option id="PipeColorOption7" value="7">Brown</option>
                 <option id="PipeColorOption8" value="8">Copper</option>
               </FormSelect>
+              <p style={{ fontSize: '10px' }}>In development</p>
             </Form.Group>
           </Container>
         </Form.Group>

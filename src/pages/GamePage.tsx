@@ -65,7 +65,7 @@ class FlappyBird extends Phaser.Scene {
   }
 
   create() {
-    const startText = this.add.text(DefaultSettings.width / 2, DefaultSettings.height / 2, 'Naciśnij spację aby rozpocząć', { fontSize: '32px', color: '#fff' });
+    const startText = this.add.text(DefaultSettings.width / 2, DefaultSettings.height / 2, 'Press space to start a game', { fontSize: '32px', color: '#fff' });
     startText.setOrigin(0.5);
 
     this.scoreText = this.add.text(10, 10, `Score: ${this.score}`, { fontSize: '32px', color: '#fff' });
@@ -119,7 +119,7 @@ class FlappyBird extends Phaser.Scene {
     this.physics.add.collider(FlappyBird.player, FlappyBird.pipe, () => {
       if (!this.gameOver) {
         this.GameOver();
-        console.log('GameOver')
+        // console.log('GameOver')
         //console.log(settings.user_name)
 
         this.tweens.add({
@@ -275,8 +275,15 @@ export const GamePage = () => {
     <>
       <GameComponent config={config} />
       <NavLink to={'/'}>
-        <button className={'btn btn-success btn-lg rounded-pill shadow px-4'}>Powrót</button>
+        <button className={'btn btn-primary btn-lg rounded-pill shadow px-4'}>Back</button>
       </NavLink>
+      <NavLink to={'/leaderboard'}>
+        <button className={'btn btn-success btn-lg rounded-pill shadow px-4'}>Leaderboard</button>
+      </NavLink>
+      <NavLink to={'/settings'}>
+        <button className={'btn btn-danger btn-lg rounded-pill shadow px-4'}>Settings</button>
+      </NavLink>
+
 
     </>
   )
