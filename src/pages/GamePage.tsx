@@ -222,6 +222,11 @@ class FlappyBird extends Phaser.Scene {
       if (leaderboard.find((entry) => (entry.user_name === user_cock.user_name && entry.user_score < user_cock.user_score)))
         leaderboard.find((entry) => (entry.user_name === user_cock.user_name)).user_score = user_cock.user_score;
     }
+    else if (leaderboard.length === 100){
+      if (leaderboard[leaderboard.length - 1].user_score < user_cock.user_score){
+         leaderboard[leaderboard.length - 1] = user_cock;
+      }
+    }
     else {
       leaderboard.push(user_cock);
     }
@@ -275,7 +280,7 @@ export const GamePage = () => {
     <>
       <GameComponent config={config} />
       <NavLink to={'/'}>
-        <button className={'btn btn-primary btn-lg rounded-pill shadow px-4'}>Quit</button>
+        <button className={'btn btn-primary btn-lg rounded-pill shadow px-4'}>Home</button>
       </NavLink>
       <NavLink to={'/leaderboard'}>
         <button className={'btn btn-success btn-lg rounded-pill shadow px-4'}>Leaderboard</button>
