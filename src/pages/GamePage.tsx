@@ -95,7 +95,7 @@ class FlappyBird extends Phaser.Scene {
         startText.destroy();
         this.pipeInterval = setInterval(this.GeneratePipes, 2500);
       } else if (this.gameOver) {
-        alert('gameover')
+        alert('Game Over!')
         this.GameOver();
       }
     });
@@ -275,7 +275,7 @@ export const GamePage = () => {
     <>
       <GameComponent config={config} />
       <NavLink to={'/'}>
-        <button className={'btn btn-success btn-lg rounded-pill shadow px-4'}>Powrót</button>
+        <button className={'btn btn-success btn-lg rounded-pill shadow px-4'}>Quit</button>
       </NavLink>
 
     </>
