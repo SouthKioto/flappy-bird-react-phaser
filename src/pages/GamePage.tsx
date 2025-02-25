@@ -65,7 +65,7 @@ class FlappyBird extends Phaser.Scene {
   }
 
   create() {
-    const startText = this.add.text(DefaultSettings.width / 2, DefaultSettings.height / 2, 'Press space to start a game', { fontSize: '32px', color: '#fff' });
+    const startText = this.add.text(DefaultSettings.width / 2, DefaultSettings.height / 2, 'Press space to start the game', { fontSize: '32px', color: '#fff' });
     startText.setOrigin(0.5);
 
     this.scoreText = this.add.text(10, 10, `Score: ${this.score}`, { fontSize: '32px', color: '#fff' });
