@@ -35,4 +35,13 @@ and next
 ## Gallery
 
 - Main
-![mainpage]()
+![mainpage](https://github.com/SouthKioto/flappy-bird-react-phaser/blob/master/src/gallery/main.png) 
+
+- LeaderBoard
+![leaderBoard](https://github.com/SouthKioto/flappy-bird-react-phaser/blob/master/src/gallery/leaderboard.png)
+
+- Settings
+![settings](https://github.com/SouthKioto/flappy-bird-react-phaser/blob/master/src/gallery/settings.png)
+
+- Game
+- ![game]()
