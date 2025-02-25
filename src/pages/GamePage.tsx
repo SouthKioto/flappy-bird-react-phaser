@@ -147,7 +147,7 @@ class FlappyBird extends Phaser.Scene {
         let leaderboard = JSON.parse(localStorage.getItem("leaderboard") || "[]");
         if(leaderboard === null)
         {
-          localStorage.handleClick("leaderboard", JSON.stringify([user_cock]));
+          localStorage.setItem("leaderboard", JSON.stringify([user_cock]));
         }
 
         if(leaderboard.find((entry) => (entry.user_name === user_cock.user_name)))
@@ -155,13 +155,12 @@ class FlappyBird extends Phaser.Scene {
           if(leaderboard.find((entry) => (entry.user_name === user_cock.user_name && entry.user_score < user_cock.user_score)))
             leaderboard.find((entry) => (entry.user_name === user_cock.user_name)).user_score = user_cock.user_score;
         }
-        else
+        else if(leaderboard.length !== 25)
         {
           leaderboard.push(user_cock);
         }
       
         localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-        alert("Added");
 
         this.tweens.add({
           targets: FlappyBird.player,
