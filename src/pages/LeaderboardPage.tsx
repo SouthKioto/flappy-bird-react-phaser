@@ -15,7 +15,7 @@ export const LeaderboardPage = () => {
   const [Leaderboard] = useState<LeaderboardEntry[]>(() => {
     const encodedLeaderboardData = localStorage.getItem("leaderboard");
     if (encodedLeaderboardData === null) {
-      localStorage.setItem("leaderboard", JSON.stringify([{
+      /*localStorage.setItem("leaderboard", JSON.stringify([{
         "user_name": "Mata",
         "user_score": 10000000000
       },
@@ -26,7 +26,7 @@ export const LeaderboardPage = () => {
       {
         "user_name": "Player1",
         "user_score": 2000
-      }]));
+      }]));*/
 
       return [JSON.parse(localStorage.getItem("settings") || "error")];
     }
