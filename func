@@ -1,0 +1,31 @@
+import React from 'react';
+  
+export const GamePage = () => {
+  const handleClick =(nick) => {
+    let items = JSON.parse(localStorage.getItem("test") || "[]");
+    if(items === null)
+    {
+      localStorage.handleClick("test", JSON.stringify([{"user_name": nick, "user_score": 55555}]));
+    }
+
+    if(items.find((item) => (item.user_name === nick)))
+    {
+      items.find((item) => (item.user_name === nick)).user_score = 55552;
+    }
+    else
+    {
+      items.push({"user_name": nick, "user_score": 55553});
+    }
+  
+    localStorage.setItem("test", JSON.stringify(items));
+    alert("Added");
+  }
+  
+  return (
+    <>
+      <input id="input" type="text"
+       />
+      <button onClick={(e) => (handleClick((document.getElementById("input") as HTMLInputElement).value))}></button>
+    </>
+  )
+}
