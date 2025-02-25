@@ -1,14 +1,8 @@
 import Phaser from "phaser"
 import { GameComponent } from "../components/GameComponent";
 import { DefaultSettings } from "../settings/DefaultSettings";
-import FormCheckLabel from "react-bootstrap/esm/FormCheckLabel";
-
-import Settings from "../settings/DefaultUserSettings.json";
 import { useEffect, useState } from "react";
-import { Placeholder } from "react-bootstrap";
-
-//na razie interface nie potrzebne 
-//ale moga sie przydac pozniej podczas
+import { NavLink } from "react-router";
 
 interface UserCock {
   cock_colour: number,
@@ -33,10 +27,10 @@ class FlappyBird extends Phaser.Scene {
 
   private constructor() {
     super()
-  }  
+  }
 
-  public static Instance = () : FlappyBird => {
-    if(this.FlappyBird_ ===  null || this.FlappyBird_ === undefined){
+  public static Instance = (): FlappyBird => {
+    if (this.FlappyBird_ === null || this.FlappyBird_ === undefined) {
       this.FlappyBird_ = new FlappyBird();
     }
     return this.FlappyBird_;
@@ -58,25 +52,24 @@ class FlappyBird extends Phaser.Scene {
   public score: number = 0;
   private scoreText: Phaser.GameObjects.Text;
 
+  private settings: UserSettingsJson = JSON.parse(localStorage.getItem('settings') || '');
+
   preload() {
-    this.load.image('background', `../../assets/Background/Background${DefaultSettings.background_colour}.png`);
-
-    /*this.load.spritesheet('pipe', `../../assets/Tiles/Style ${DefaultSettings.pipe_style}/PipeStyle${DefaultSettings.pipe_style}.png`, {
-      frameHeight: 48,
-      frameWidth: 32,
-    })*/
-
+    //this.load.image('background', `../../assets/Background/Background${DefaultSettings.background_colour}.png`);
     this.load.image('pipeTop', '../../assets/Tiles/pipe-green-top.png');
     this.load.image('pipeBot', '../../assets/Tiles/pipe-green-bot.png');
-
-
-    this.load.spritesheet('bird', `../../assets/Player/StyleBird${DefaultSettings.bird_style}/Bird${DefaultSettings.bird_style}-${DefaultSettings.bird_colour}.png`, {
+    this.load.spritesheet('bird', `../../assets/Player/StyleBird${this.settings.user_cock.cock_style}/Bird${this.settings.user_cock.cock_style}-${this.settings.user_cock.cock_colour}.png`, {
       frameHeight: 16,
       frameWidth: 16,
     });
   }
 
   create() {
+    const startText = this.add.text(DefaultSettings.width / 2, DefaultSettings.height / 2, 'Naciśnij spację aby rozpocząć', { fontSize: '32px', color: '#fff' });
+    startText.setOrigin(0.5);
+
+    this.scoreText = this.add.text(10, 10, `Score: ${this.score}`, { fontSize: '32px', color: '#fff' });
+
     FlappyBird.pipe = this.physics.add.group({
       allowGravity: false,
       immovable: true,
@@ -88,16 +81,13 @@ class FlappyBird extends Phaser.Scene {
 
     FlappyBird.player.body.allowGravity = false;
 
-    const startText = this.add.text(DefaultSettings.width / 2, DefaultSettings.height / 2, 'Naciśnij spację aby rozpocząć', { fontSize: '32px', color: '#fff' });
-    startText.setOrigin(0.5);
-
-    this.scoreText = this.add.text(10, 10, `Score ${this.score}`, { fontSize: '32px', color: '#fff' });
+    console.log(this.settings.user_cock.cock_style)
 
     this.input.keyboard?.on('keydown-SPACE', () => {
       if (!this.gameStarted) {
         this.gameStarted = true;
         this.gameOver = false;
-        this.score = 0; // Zresetuj wynik
+        this.score = 0;
         this.scoreText.setText(`Score: ${this.score}`);
 
         FlappyBird.player.body.allowGravity = true;
@@ -105,9 +95,8 @@ class FlappyBird extends Phaser.Scene {
         startText.destroy();
         this.pipeInterval = setInterval(this.GeneratePipes, 2500);
       } else if (this.gameOver) {
-        // Zresetuj grę po zakończeniu
-        this.cleanup();
-        this.scene.restart();
+        alert('gameover')
+        this.GameOver();
       }
     });
 
@@ -129,39 +118,9 @@ class FlappyBird extends Phaser.Scene {
 
     this.physics.add.collider(FlappyBird.player, FlappyBird.pipe, () => {
       if (!this.gameOver) {
-        this.gameStarted = false;
-        this.gameOver = true;
-        this.cleanup();
-
-        const settings : UserSettingsJson = JSON.parse(localStorage.getItem("settings") || '');
-
+        this.GameOver();
+        console.log('GameOver')
         //console.log(settings.user_name)
-
-        console.log(`Score: ${this.score}`)
-
-        const user_cock = {
-          user_name: settings.user_name,
-          user_score: this.score
-        }
-
-        let leaderboard = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-        if(leaderboard === null)
-        {
-          localStorage.handleClick("leaderboard", JSON.stringify([user_cock]));
-        }
-
-        if(leaderboard.find((entry) => (entry.user_name === user_cock.user_name)))
-        {
-          if(leaderboard.find((entry) => (entry.user_name === user_cock.user_name && entry.user_score < user_cock.user_score)))
-            leaderboard.find((entry) => (entry.user_name === user_cock.user_name)).user_score = user_cock.user_score;
-        }
-        else
-        {
-          leaderboard.push(user_cock);
-        }
-      
-        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-        alert("Added");
 
         this.tweens.add({
           targets: FlappyBird.player,
@@ -185,13 +144,14 @@ class FlappyBird extends Phaser.Scene {
 
 
   update() {
-    if (!this.gameStarted || this.gameOver) { // Zatrzymaj akcje, gdy gra się nie zaczęła lub skończyła
+    if (!this.gameStarted || this.gameOver) {
       return;
     }
 
     FlappyBird.pipes.forEach((pipe) => {
-      if (pipe.texture.key == 'pipeTop' && !pipe.getData('scored')) {
-        if (pipe.x + pipe.width < FlappyBird.player.x) {
+      if (!pipe.getData('scored') && pipe.x + pipe.width < FlappyBird.player.x) {
+        if (pipe.texture.key === 'pipeTop') {
+
           this.score += 1;
           pipe.setData('scored', true);
           this.scoreText.setText(`Score: ${this.score}`);
@@ -215,20 +175,18 @@ class FlappyBird extends Phaser.Scene {
     for (let i = FlappyBird.pipes.length - 1; i >= 0; i--) {
       const pipe = FlappyBird.pipes[i];
 
-
       if (pipe.x < -pipe.width) {
         pipe.destroy();
         FlappyBird.pipes.splice(i, 1);
 
       } else {
-        pipe.x -= 2;
+        pipe.x -= 3;
       }
     }
   }
 
   GeneratePipes = () => {
-    if (this.gameOver) return; // Zatrzymaj generowanie rur po zakończeniu gry
-
+    if (this.gameOver) return;
     const pipeBotTexture = this.textures.get('pipeBot');
     const pipeTopTexture = this.textures.get('pipeTop');
 
@@ -241,10 +199,48 @@ class FlappyBird extends Phaser.Scene {
     let pipeBot = FlappyBird.pipe.create(FlappyBird.pipeX, randomY + emptySpace + pipeBotHeight, 'pipeBot') as Phaser.Physics.Arcade.Sprite;
 
     pipeTop.setData('scored', false);
+    pipeBot.setData('scored', false);
 
     FlappyBird.pipes.push(pipeTop);
     FlappyBird.pipes.push(pipeBot);
   }
+
+  GameOver = () => {
+    console.log(`Score: ${this.score}`)
+
+    const user_cock = {
+      user_name: this.settings.user_name,
+      user_score: this.score
+    }
+
+    let leaderboard = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+    if (leaderboard === null) {
+      localStorage.handleClick("leaderboard", JSON.stringify([user_cock]));
+    }
+
+    if (leaderboard.find((entry) => (entry.user_name === user_cock.user_name))) {
+      if (leaderboard.find((entry) => (entry.user_name === user_cock.user_name && entry.user_score < user_cock.user_score)))
+        leaderboard.find((entry) => (entry.user_name === user_cock.user_name)).user_score = user_cock.user_score;
+    }
+    else {
+      leaderboard.push(user_cock);
+    }
+
+    localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+
+    this.settings.user_score = this.score;
+    localStorage.setItem('settings', JSON.stringify(this.settings));
+
+
+    this.gameOver = true;
+    this.gameStarted = false;
+    this.score = 0;
+
+    this.cleanup();
+    this.scene.restart();
+
+
+  };
 
 }
 
@@ -278,6 +274,10 @@ export const GamePage = () => {
   return (
     <>
       <GameComponent config={config} />
+      <NavLink to={'/'}>
+        <button className={'btn btn-success btn-lg rounded-pill shadow px-4'}>Powrót</button>
+      </NavLink>
+
     </>
   )
 }

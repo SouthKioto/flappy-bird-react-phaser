@@ -8,6 +8,7 @@ import { SettingsPage } from './pages/SettingsPage.tsx'
 import { LeaderboardPage } from './pages/LeaderboardPage.tsx'
 import { Game } from 'phaser'
 import { Settings } from './pages/Settings.tsx'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
