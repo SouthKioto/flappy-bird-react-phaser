@@ -46,6 +46,8 @@ class FlappyBird extends Phaser.Scene {
   static pipeX = window.innerWidth;
   static pipeY = 0;
 
+private pipe_speed: number = 3;
+
   private pipeInterval: NodeJS.Timer;
   private gameStarted: boolean = false;
   private gameOver: boolean = false;
@@ -180,7 +182,10 @@ class FlappyBird extends Phaser.Scene {
         FlappyBird.pipes.splice(i, 1);
 
       } else {
-        pipe.x -= 3;
+if(FlappyBird.score % 10 === 0){
+      FlappyBird.pipe_speed += 3;
+}
+        pipe.x -= FlappyBird.pipe_speed;
       }
     }
   }
