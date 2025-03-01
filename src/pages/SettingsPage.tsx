@@ -60,8 +60,8 @@ export const SettingsPage = () => {
 
   useEffect(() => {
     localStorage.setItem("settings", JSON.stringify({
-      "user_name": userName,
-      "user_score": 2137,
+      "user_name": userName.trim(),
+      "user_score": 0,
       "user_cock": {
         "cock_colour": birdColor,
         "cock_style": birdStyle

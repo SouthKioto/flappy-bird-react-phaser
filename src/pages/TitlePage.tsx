@@ -46,7 +46,7 @@ export const TitlePage = () => {
     }
 
     const decodedLeaderboardData = JSON.parse(encodedLeaderboardData);
-    const score = decodedLeaderboardData.sort((a, b) => b.user_score - a.user_score).slice(0, 1).user_score;
+    const score = decodedLeaderboardData.sort((a, b) => b.user_score - a.user_score)[0].user_score;
     return score;
   })
 

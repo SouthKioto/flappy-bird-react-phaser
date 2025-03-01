@@ -36,6 +36,8 @@ class FlappyBird extends Phaser.Scene {
   static pipeX = window.innerWidth;
   static pipeY = 0;
 
+private pipe_speed: number = 3;
+
   private pipeInterval: NodeJS.Timer;
   private gameStarted: boolean = false;
   private gameOver: boolean = false;
@@ -57,7 +59,7 @@ class FlappyBird extends Phaser.Scene {
   }
 
   create() {
-    const startText = this.add.text(DefaultSettings.width / 2, DefaultSettings.height / 2, 'Press space to start a game', { fontSize: '32px', color: '#fff' });
+    const startText = this.add.text(DefaultSettings.width / 2, DefaultSettings.height / 2, 'Press space to start the game', { fontSize: '32px', color: '#fff' });
     startText.setOrigin(0.5);
 
     this.scoreText = this.add.text(10, 10, `Score: ${this.score}`, { fontSize: '32px', color: '#fff' });
@@ -182,7 +184,14 @@ class FlappyBird extends Phaser.Scene {
         FlappyBird.pipes.splice(i, 1);
 
       } else {
+<<<<<<< HEAD
         pipe.x -= this.pipe_speed;
+=======
+if(FlappyBird.score % 10 === 0){
+      FlappyBird.pipe_speed += 3;
+}
+        pipe.x -= FlappyBird.pipe_speed;
+>>>>>>> 1debbfdd9fa4c72f3e3a4ff943795a4a7225837a
       }
     }
   }
@@ -223,6 +232,11 @@ class FlappyBird extends Phaser.Scene {
     if (leaderboard.find((entry) => (entry.user_name === user_cock.user_name))) {
       if (leaderboard.find((entry) => (entry.user_name === user_cock.user_name && entry.user_score < user_cock.user_score)))
         leaderboard.find((entry) => (entry.user_name === user_cock.user_name)).user_score = user_cock.user_score;
+    }
+    else if (leaderboard.length === 100){
+      if (leaderboard[leaderboard.length - 1].user_score < user_cock.user_score){
+         leaderboard[leaderboard.length - 1] = user_cock;
+      }
     }
     else {
       leaderboard.push(user_cock);
@@ -275,7 +289,7 @@ export const GamePage = () => {
     <>
       <GameComponent config={config} />
       <NavLink to={'/'}>
-        <button className={'btn btn-primary btn-lg rounded-pill shadow px-4'}>Quit</button>
+        <button className={'btn btn-primary btn-lg rounded-pill shadow px-4'}>Home</button>
       </NavLink>
       <NavLink to={'/leaderboard'}>
         <button className={'btn btn-success btn-lg rounded-pill shadow px-4'}>Leaderboard</button>
