@@ -1,4 +1,3 @@
-import Phaser from "phaser"
 import { GameComponent } from "../components/GameComponent";
 import { DefaultSettings } from "../settings/DefaultSettings";
 import { useEffect, useState } from "react";
@@ -18,24 +17,15 @@ interface UserSettingsJson {
   user_name: string,
   user_score: number,
 
-  user_cock: UserCock
+  user_cock: UserCock,
   user_pipe: UserPipe,
+
+  game_background_color: string,
 }
 
+//const settings: UserSettingsJson = JSON.parse(localStorage.getItem('settings') || '');
+
 class FlappyBird extends Phaser.Scene {
-  private static FlappyBird_: FlappyBird  //instancja
-
-  private constructor() {
-    super()
-  }
-
-  public static Instance = (): FlappyBird => {
-    if (this.FlappyBird_ === null || this.FlappyBird_ === undefined) {
-      this.FlappyBird_ = new FlappyBird();
-    }
-    return this.FlappyBird_;
-  }
-
   static player;
 
   static pipes: Phaser.GameObjects.Sprite[] = [];
@@ -50,9 +40,11 @@ class FlappyBird extends Phaser.Scene {
   private gameStarted: boolean = false;
   private gameOver: boolean = false;
   public score: number = 0;
+  public pipe_speed: number = 3;
+  public generate_pipe_time: number = 2500;
   private scoreText: Phaser.GameObjects.Text;
 
-  private settings: UserSettingsJson = JSON.parse(localStorage.getItem('settings') || '');
+  public settings: UserSettingsJson = JSON.parse(localStorage.getItem('settings') || '');
 
   preload() {
     //this.load.image('background', `../../assets/Background/Background${DefaultSettings.background_colour}.png`);
@@ -81,7 +73,7 @@ class FlappyBird extends Phaser.Scene {
 
     FlappyBird.player.body.allowGravity = false;
 
-    console.log(this.settings.user_cock.cock_style)
+    //console.log(settings.user_cock.cock_style)
 
     this.input.keyboard?.on('keydown-SPACE', () => {
       if (!this.gameStarted) {
@@ -93,7 +85,7 @@ class FlappyBird extends Phaser.Scene {
         FlappyBird.player.body.allowGravity = true;
 
         startText.destroy();
-        this.pipeInterval = setInterval(this.GeneratePipes, 2500);
+        this.pipeInterval = setInterval(this.GeneratePipes, this.generate_pipe_time);
       } else if (this.gameOver) {
         alert('Game Over!')
         this.GameOver();
@@ -152,6 +144,16 @@ class FlappyBird extends Phaser.Scene {
       if (!pipe.getData('scored') && pipe.x + pipe.width < FlappyBird.player.x) {
         if (pipe.texture.key === 'pipeTop') {
 
+          if (this.score % 10 == 0) {
+            this.pipe_speed = this.pipe_speed + 0.25;
+
+            if (this.generate_pipe_time >= 500) {
+              this.generate_pipe_time = this.generate_pipe_time - 200;
+            }
+
+            console.log(`Dodano. Aktualna wartość: ${this.pipe_speed}, Generate: ${this.generate_pipe_time}`)
+          }
+
           this.score += 1;
           pipe.setData('scored', true);
           this.scoreText.setText(`Score: ${this.score}`);
@@ -180,7 +182,7 @@ class FlappyBird extends Phaser.Scene {
         FlappyBird.pipes.splice(i, 1);
 
       } else {
-        pipe.x -= 3;
+        pipe.x -= this.pipe_speed;
       }
     }
   }
@@ -239,24 +241,22 @@ class FlappyBird extends Phaser.Scene {
     this.cleanup();
     this.scene.restart();
 
-
+    window.location.reload();
   };
 
 }
 
 export const GamePage = () => {
-  const flappy_score = FlappyBird.Instance();
-  console.log(flappy_score.score);
-
-  useEffect(() => {
-    console.log(flappy_score.score);
-  }, [flappy_score])
+  //console.log(settings.game_background_color)
+  //console.log(settings) 
+  const settings = JSON.parse(localStorage.getItem('settings') || '');
 
   const config = {
     type: Phaser.AUTO,
     parent: 'phaser-container',
     width: DefaultSettings.width,
     height: DefaultSettings.height,
+    backgroundColor: settings.game_background_color,
     scale: {
       mode: Phaser.Scale.FIT,
       //autoCenter: Phaser.Scale.CENTER_BOTH
