@@ -75,7 +75,7 @@ export const SettingsPage = () => {
       },
       "game_background_color": backgroundColor,
     }))
-  }, [userName, birdStyle, birdColor, pipeStyle, pipeColor])
+  }, [userName, birdStyle, birdColor, backgroundColor, pipeStyle, pipeColor])
 
   return (
     <>
