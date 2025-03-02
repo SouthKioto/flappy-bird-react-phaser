@@ -25,6 +25,8 @@ interface Settings {
   user_cock: UserCock,
   user_pipe: UserPipe,
 
+  game_background_color: string,
+
 }
 
 export const SettingsPage = () => {
@@ -43,6 +45,7 @@ export const SettingsPage = () => {
   const [userNameOnChange, setUserNameOnChange] = useState(userName);
   const [birdStyle, setBirdStyle] = useState<number>(settings.user_cock.cock_style);
   const [birdColor, setBirdColor] = useState<number>(settings.user_cock.cock_colour);
+  const [backgroundColor, setBackgroundColor] = useState<string>(settings.game_background_color);
   const [pipeStyle, setPipeStyle] = useState<number>(settings.user_pipe.pipe_style);
   const [pipeColor, setPipeColor] = useState<number>(settings.user_pipe.pipe_colour);
 
@@ -64,12 +67,13 @@ export const SettingsPage = () => {
       "user_score": 0,
       "user_cock": {
         "cock_colour": birdColor,
-        "cock_style": birdStyle
+        "cock_style": birdStyle,
       },
       "user_pipe": {
         "pipe_colour": pipeColor,
-        "pipe_style": pipeStyle
-      }
+        "pipe_style": pipeStyle,
+      },
+      "game_background_color": backgroundColor,
     }))
   }, [userName, birdStyle, birdColor, pipeStyle, pipeColor])
 
@@ -116,17 +120,26 @@ export const SettingsPage = () => {
                 <option id="BirdColorOption6" value="6">White</option>
                 <option id="BirdColorOption7" value="7">Pink</option>
               </FormSelect>
+              <hr className='m-4'/>
+              <h5 className='mt-3'>Background color:</h5>
+              <Form.Control
+                className="w-100"
+                type="color"
+                defaultValue={backgroundColor}
+                onChange={(e) => setBackgroundColor(String(e.target.value))}
+                title="Choose your background color"
+              />
               <hr className='m-4' />
               <h5 className='mt-3'>Pipe style:</h5>
               <img src={"assets/settings/pipe/PipeStyle" + pipeStyle + ".png"} alt={"pipeStyle" + pipeStyle} className='m-1' />
-              <FormSelect onChange={(e) => setPipeStyle(Number(e.target.value))} disabled >
+              <FormSelect onChange={(e) => setPipeStyle(Number(e.target.value))} disabled>
                 <option id="PipeStyleOption1" value="1">Classic</option>
                 <option id="PipeStyleOption2" value="2">Granite</option>
                 <option id="PipeStyleOption3" value="3">Cartoon</option>
                 <option id="PipeStyleOption4" value="4">Simple</option>
                 <option id="PipeStyleOption5" value="5">Castle</option>
               </FormSelect>
-              <p style={{ fontSize: '10px' }}>in development</p>
+              <p style={{ fontSize: '10px' }}>In development</p>
 
               <h5 className='mt-3'>Pipe color:</h5>
               <FormSelect onChange={(e) => setPipeColor(Number(e.target.value))} disabled>
