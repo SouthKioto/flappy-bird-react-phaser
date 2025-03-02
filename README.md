@@ -10,6 +10,11 @@ and next
 ```Bash
     yarn run dev
 ```
+or if that doest work try it:
+
+```Bash
+    npm run dev
+```
 
 ## Solution used:
 - <b>Liblary: React + TypeScript</b>
